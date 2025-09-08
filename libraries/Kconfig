@@ -461,23 +461,24 @@ menu "On-chip Peripheral Drivers"
         select RT_USING_PIN
         if BSP_USING_SOFT_SPI
             menuconfig BSP_USING_SOFT_SPI1
-                bool "Enable soft SPI1 BUS (software simulation)"
+                bool "Enable 40Pin Rpi soft SPI1 BUS (software simulation)"
                 default n
                 if BSP_USING_SOFT_SPI1
+                    comment "set soft-spi pin number"
                     config BSP_S_SPI1_SCK_PIN
-                        int "soft spi1 sck pin number"
+                        int "soft SPI1 SCK pin number, default PG.5(101)"
                         range 1 176
-                        default 16
-                    config BSP_S_SPI1_MISO_PIN
-                        int "soft spi1 miso pin number"
-                        range 1 176
-                        default 18
+                        default 101
                     config BSP_S_SPI1_MOSI_PIN
-                        int "soft spi1 mosi pin number"
+                        int "soft SPI1 MOSI pin number, default PG.1(97)"
                         range 1 176
-                        default 91
+                        default 97
+                    config BSP_S_SPI1_MISO_PIN
+                        int "soft SPI1 MISO pin number, default PG.3(99)"
+                        range 1 176
+                        default 99
                 endif
-            
+
             menuconfig BSP_USING_SOFT_SPI2
                 bool "Enable soft SPI2 BUS (software simulation)"
                 default n
@@ -726,4 +727,68 @@ menu "Board extended module Drivers"
 
 endmenu
 
+menu "Third-Party module Drivers"
+    menuconfig PKG_USING_ILI9341
+        bool "TFT-LCD ILI9341 SPI screen driver software package"
+        default n
+        select RT_USING_PIN
+        select RT_USING_SPI
+
+    if PKG_USING_ILI9341
+
+        config PKG_ILI9341_PATH
+            string
+            default "/packages/peripherals/ili9341"
+
+        config PKG_ILI_9341_SPI_BUS_NAME
+            string "spi bus name"
+            default "sspi1"
+
+        config PKG_ILI_9341_SPI_DEVICE_NAME
+                string "spi device name"
+                default "sspi10"
+
+        config PKG_ILI_9341_WIDTH
+            int "Width of the LCD display"
+            default 240
+
+        config PKG_ILI_9341_HEIGHT
+            int "Height of the LCD display"
+            default 320
+
+        config PKG_ILI_9341_DC_PIN
+            int "DC pin connected to the LCD display, default PB.15(31)"
+            default 31
+
+        config PKG_ILI_9341_RES_PIN
+            int "RESET pin connected to the LCD display, default PB.14(30)"
+            default 30
+
+        config PKG_ILI_9341_CS_PIN
+            int "CS pin connected to the LCD display, default PG.04(100)"
+            default 100
+
+        config PKG_ILI_9341_BLK_PIN
+            int "Backlight pin connected to the LCD display, default -1"
+            default -1
+        choice
+            prompt "Version"
+            default PKG_USING_ILI9341_LATEST_VERSION
+            help
+                Select the package version
+
+            config PKG_USING_ILI9341_V100
+                bool "v1.0.0"
+
+            config PKG_USING_ILI9341_LATEST_VERSION
+                bool "latest"
+        endchoice
+
+        config PKG_ILI9341_VER
+        string
+        default "v1.0.0"    if PKG_USING_ILI9341_V100
+        default "latest"    if PKG_USING_ILI9341_LATEST_VERSION
+
+    endif
+endmenu
 endmenu

@@ -16,8 +16,9 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-#include <drv_lcd.h>
+//#include <drv_lcd.h>
 #include <rttlogo.h>
+#include "lcd_ili9341.h"
 
 /* 配置 LED 灯引脚 */
 #define PIN_LED_B              GET_PIN(F, 11)      // PF11 :  LED_B        --> LED
@@ -25,28 +26,30 @@
 
 int main(void)
 {
-    lcd_clear(WHITE);
 
-    /* show RT-Thread logo */
-    lcd_show_image(0, 0, 240, 69, image_rttlogo);
+    spi_lcd_init(20);
+//    lcd_clear(WHITE);
 
-    /* set the background color and foreground color */
-    lcd_set_color(WHITE, BLACK);
+//    /* show RT-Thread logo */
+//    lcd_show_image(0, 0, 240, 69, image_rttlogo);
 
-    /* show some string on lcd */
-    lcd_show_string(10, 69, 16, "Hello, RT-Thread!");
-    lcd_show_string(10, 69 + 16, 24, "RT-Thread");
-    lcd_show_string(10, 69 + 16 + 24, 32, "RT-Thread");
+//    /* set the background color and foreground color */
+//    lcd_set_color(WHITE, BLACK);
 
-    /* draw a line on lcd */
-    lcd_draw_line(0, 69 + 16 + 24 + 32, 240, 69 + 16 + 24 + 32);
+//    /* show some string on lcd */
+//    lcd_show_string(10, 69, 16, "Hello, RT-Thread!");
+//    lcd_show_string(10, 69 + 16, 24, "RT-Thread");
+//    lcd_show_string(10, 69 + 16 + 24, 32, "RT-Thread");
 
-    /* draw a concentric circles */
-    lcd_draw_point(120, 194);
-    for (int i = 0; i < 46; i += 4)
-    {
-        lcd_draw_circle(120, 194, i);
-    }
+//    /* draw a line on lcd */
+//    lcd_draw_line(0, 69 + 16 + 24 + 32, 240, 69 + 16 + 24 + 32);
+
+//    /* draw a concentric circles */
+//    lcd_draw_point(120, 194);
+//    for (int i = 0; i < 46; i += 4)
+//    {
+//        lcd_draw_circle(120, 194, i);
+//    }
     return 0;
 }
 
