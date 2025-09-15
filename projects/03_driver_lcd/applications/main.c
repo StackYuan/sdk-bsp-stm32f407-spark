@@ -24,10 +24,15 @@
 #define PIN_LED_B              GET_PIN(F, 11)      // PF11 :  LED_B        --> LED
 #define PIN_LED_R              GET_PIN(F, 12)      // PF12 :  LED_R        --> LED
 
+extern int lcd_spi_test(void);
 int main(void)
 {
 
     spi_lcd_init(20);
+    while(1)
+    {
+        lcd_spi_test();
+    }
 //    lcd_clear(WHITE);
 
 //    /* show RT-Thread logo */

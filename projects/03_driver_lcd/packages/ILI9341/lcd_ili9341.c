@@ -10,7 +10,7 @@
 #include "lcd_ili9341.h"
 
 #define DBG_TAG "ili9341"
-#define DBG_LVL DBG_LOG
+#define DBG_LVL DBG_INFO
 #include <rtdbg.h>
 
 #ifdef PKG_USING_ILI9341
@@ -28,15 +28,21 @@ static void LCD_RESET(void)
 
 static void LCD_WR_REG(uint8_t reg)
 {
+    uint8_t regbuf[2];
+    regbuf[1] = reg;
+    regbuf[0] = 0x00;
     LCD_DC_CLR;
-    rt_spi_send(lcd_dev, &reg, 1);
+    rt_spi_send(lcd_dev, &regbuf, 2);
     LCD_DC_SET;
 }
 
 static void LCD_WR_DATA(uint8_t data)
 {
+    uint8_t databuf[2];
+    databuf[1] = data;
+    databuf[0] = 0x00;
     LCD_DC_SET;
-    rt_spi_send(lcd_dev, &data, 1);
+    rt_spi_send(lcd_dev, &databuf, 2);
 }
 
 static void LCD_ReadData(uint8_t *data, uint16_t length)
@@ -169,104 +175,115 @@ void lcd_fill_array_spi(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_
 
 static void _ili9341_init(void)
 {
-    LCD_WR_REG(0xCF);
-    LCD_WR_DATA(0x00);
-    LCD_WR_DATA(0X83);
-    LCD_WR_DATA(0X30);
+    LCD_WR_REG(0xef);
+    LCD_WR_DATA(0x03);
+    LCD_WR_DATA(0x80);
+    LCD_WR_DATA(0x02);
 
-    LCD_WR_REG(0xED);
+    //may wait 1ms
+    DELAY(1);
+
+    LCD_WR_REG(0xcf);
+    LCD_WR_DATA(0x00);
+    LCD_WR_DATA(0xc1);
+    LCD_WR_DATA(0x30);
+
+    LCD_WR_REG(0xed);
     LCD_WR_DATA(0x64);
     LCD_WR_DATA(0x03);
-    LCD_WR_DATA(0X12);
-    LCD_WR_DATA(0X81);
+    LCD_WR_DATA(0x12);
+    LCD_WR_DATA(0x81);
 
-    LCD_WR_REG(0xE8);
+    LCD_WR_REG(0xe8);
     LCD_WR_DATA(0x85);
     LCD_WR_DATA(0x00);
-    LCD_WR_DATA(0x79);
+    LCD_WR_DATA(0x78);
 
-    LCD_WR_REG(0xCB);
+    LCD_WR_REG(0xcb);
     LCD_WR_DATA(0x39);
-    LCD_WR_DATA(0x2C);
+    LCD_WR_DATA(0x2c);
     LCD_WR_DATA(0x00);
     LCD_WR_DATA(0x34);
     LCD_WR_DATA(0x02);
 
-    LCD_WR_REG(0xF7);
+    LCD_WR_REG(0xf7);
     LCD_WR_DATA(0x20);
 
-    LCD_WR_REG(0xEA);
+    LCD_WR_REG(0xea);
     LCD_WR_DATA(0x00);
     LCD_WR_DATA(0x00);
 
-    LCD_WR_REG(0xC0);   /* Power control */
-    LCD_WR_DATA(0x26);  /* VRH[5:0] */
+    LCD_WR_REG(0xc0);   /* Power control */
+    LCD_WR_DATA(0x23);  /* VRH[5:0] */
 
-    LCD_WR_REG(0xC1);   /* Power control */
-    LCD_WR_DATA(0x11);  /* SAP[2:0];BT[3:0] */
+    LCD_WR_REG(0xc1);   /* Power control */
+    LCD_WR_DATA(0x10);  /* SAP[2:0];BT[3:0] */
 
-    LCD_WR_REG(0xC5);   /* VCM control */
-    LCD_WR_DATA(0x35);
-    LCD_WR_DATA(0x3E);
-
-    LCD_WR_REG(0xC7);   /* VCM control2 */
-    LCD_WR_DATA(0XBE);
-
-    LCD_WR_REG(0x36);   /* Memory Access Control */
+    LCD_WR_REG(0xc5);   /* VCM control */
+    LCD_WR_DATA(0x3e);
     LCD_WR_DATA(0x28);
 
-    LCD_WR_REG(0x3A);
+    LCD_WR_REG(0xc7);   /* VCM control2 */
+    LCD_WR_DATA(0x86);
+
+    LCD_WR_REG(0x3a);
     LCD_WR_DATA(0x55);
 
-    LCD_WR_REG(0xB1);
+    LCD_WR_REG(0xb1);
     LCD_WR_DATA(0x00);
-    LCD_WR_DATA(0x1B);
+    LCD_WR_DATA(0x18);
 
-    LCD_WR_REG(0xB6);   /* Display Function Control */
-    LCD_WR_DATA(0x0A);
-    LCD_WR_DATA(0xA2);
-
-    LCD_WR_REG(0xF2);   /* 3Gamma Function Disable */
+    LCD_WR_REG(0xb6);
     LCD_WR_DATA(0x08);
+    LCD_WR_DATA(0x82);
+    LCD_WR_DATA(0x27);
 
-    LCD_WR_REG(0x26);   /* Gamma curve selected */
-    LCD_WR_DATA(0x01);
+    LCD_WR_REG(0xf2);
+    LCD_WR_DATA(0x00);
 
-    LCD_WR_REG(0xE0);   /* set Gamma */
-    LCD_WR_DATA(0X1F);
-    LCD_WR_DATA(0X1A);
-    LCD_WR_DATA(0X18);
-    LCD_WR_DATA(0X0A);
-    LCD_WR_DATA(0X0F);
-    LCD_WR_DATA(0X06);
-    LCD_WR_DATA(0X45);
-    LCD_WR_DATA(0X87);
-    LCD_WR_DATA(0X32);
-    LCD_WR_DATA(0X0A);
-    LCD_WR_DATA(0X07);
-    LCD_WR_DATA(0X02);
-    LCD_WR_DATA(0X07);
-    LCD_WR_DATA(0X05);
-    LCD_WR_DATA(0X00);
+    LCD_WR_REG(0x26);
+    LCD_WR_DATA(0x01); 
 
-    LCD_WR_REG(0xE1);   /* set Gamma */
-    LCD_WR_DATA(0X00);
-    LCD_WR_DATA(0X25);
-    LCD_WR_DATA(0X27);
-    LCD_WR_DATA(0X05);
-    LCD_WR_DATA(0X10);
-    LCD_WR_DATA(0X09);
-    LCD_WR_DATA(0X3A);
-    LCD_WR_DATA(0X78);
-    LCD_WR_DATA(0X4D);
-    LCD_WR_DATA(0X05);
-    LCD_WR_DATA(0X18);
-    LCD_WR_DATA(0X0D);
-    LCD_WR_DATA(0X38);
-    LCD_WR_DATA(0X3A);
-    LCD_WR_DATA(0X2F);
+    LCD_WR_REG(0xe0);   /* set Gamma */
+    LCD_WR_DATA(0x0f);
+    LCD_WR_DATA(0x31);
+    LCD_WR_DATA(0x2b);
+    LCD_WR_DATA(0x0c);
+    LCD_WR_DATA(0x0e);
+    LCD_WR_DATA(0x08);
+    LCD_WR_DATA(0x4e);
+    LCD_WR_DATA(0xf1);
+    LCD_WR_DATA(0x37);
+    LCD_WR_DATA(0x07);
+    LCD_WR_DATA(0x10);
+    LCD_WR_DATA(0x03);
+    LCD_WR_DATA(0x0e);
+    LCD_WR_DATA(0x09);
+    LCD_WR_DATA(0x00);
 
+    LCD_WR_REG(0xe1);   /* set Gamma */
+    LCD_WR_DATA(0x00);
+    LCD_WR_DATA(0x0e);
+    LCD_WR_DATA(0x14);
+    LCD_WR_DATA(0x03);
+    LCD_WR_DATA(0x11);
+    LCD_WR_DATA(0x07);
+    LCD_WR_DATA(0x31);
+    LCD_WR_DATA(0xc1);
+    LCD_WR_DATA(0x48);
+    LCD_WR_DATA(0x08);
+    LCD_WR_DATA(0x0f);
+    LCD_WR_DATA(0x0c);
+    LCD_WR_DATA(0x31);
+    LCD_WR_DATA(0x36);
+    LCD_WR_DATA(0x0f);
+
+    LCD_WR_REG(0x11);
+    rt_thread_mdelay(100);
     LCD_WR_REG(0x29);
+    LCD_WR_REG(0x36);
+    LCD_WR_DATA(0x28);
+
 }
 
 static void Lcd_pin_init(void)
@@ -282,7 +299,7 @@ static void LCD_Init(void)
     Lcd_pin_init();
 
     LCD_RESET();        /* LCD Hardware Reset */
-    LCD_WR_REG(0x11);   /* Sleep out */
+//    LCD_WR_REG(0x11);   /* Sleep out */
     DELAY(120);         /* Delay 120ms */
     _ili9341_init();    /* IlI9341 init */
     LCD_BLK_CLR;        /* Open Backlight */
@@ -335,6 +352,7 @@ rt_err_t spi_lcd_init(uint32_t freq)
     }
 
     LCD_Init();
+    LOG_I("lcd init done");
 
     return res;
 }
@@ -345,7 +363,7 @@ static uint16_t color_array[] =
     GRED, GBLUE, RED, YELLOW
 };
 
-static int lcd_spi_test(void)
+int lcd_spi_test(void)
 {
     uint8_t index = 0;
     for (index = 0; index < sizeof(color_array) / sizeof(color_array[0]); index++)
