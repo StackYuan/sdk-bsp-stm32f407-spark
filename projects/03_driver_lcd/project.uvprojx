@@ -52,7 +52,7 @@
           <OutputName>rt-thread</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>1</CreateHexFile>
+          <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\build\keil\List\</ListingPath>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>RT_USING_LIBC, USE_HAL_DRIVER, STM32F407xx, __CLK_TCK=RT_TICK_PER_SECOND, __STDC_LIMIT_MACROS, __RTTHREAD__, RT_USING_ARM_LIBC</Define>
               <Undefine></Undefine>
-              <IncludePath>applications;rt-thread\components\libc\compilers\common\include;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;board;board\CubeMX_Config\Inc;libraries\Board_Drivers;libraries\HAL_Drivers;libraries\HAL_Drivers\config;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\finsh;packages\ILI9341;.;rt-thread\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\io\poll;rt-thread\components\libc\posix\io\stdio;rt-thread\components\libc\posix\ipc</IncludePath>
+              <IncludePath>applications;rt-thread\components\libc\compilers\common\include;rt-thread\components\libc\compilers\common\extension;rt-thread\components\libc\compilers\common\extension\fcntl\octal;rt-thread\libcpu\arm\common;rt-thread\libcpu\arm\cortex-m4;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\include;rt-thread\components\drivers\spi;rt-thread\components\drivers\include;rt-thread\components\drivers\touch;rt-thread\components\drivers\include;board;board\CubeMX_Config\Inc;libraries\Board_Drivers;libraries\HAL_Drivers;libraries\HAL_Drivers\config;libraries\HAL_Drivers\CMSIS\Include;rt-thread\components\finsh;packages\ili9341;.;rt-thread\include;libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Inc;libraries\STM32F4xx_HAL\CMSIS\Device\ST\STM32F4xx\Include;rt-thread\components\libc\posix\io\poll;rt-thread\components\libc\posix\io\stdio;rt-thread\components\libc\posix\ipc;packages\xpt2046</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -384,6 +384,11 @@
         <Group>
           <GroupName>Applications</GroupName>
           <Files>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\main.c</FilePath>
+            </File>
             <File>
               <FileName>app_lcd.c</FileName>
               <FileType>1</FileType>
@@ -439,11 +444,6 @@
                   </Cads>
                 </FileArmAds>
               </FileOption>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -605,6 +605,11 @@
               <FileType>1</FileType>
               <FilePath>rt-thread\components\drivers\spi\spi_dev.c</FilePath>
             </File>
+            <File>
+              <FileName>touch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>rt-thread\components\drivers\touch\touch.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -683,7 +688,7 @@
             <File>
               <FileName>lcd_ili9341.c</FileName>
               <FileType>1</FileType>
-              <FilePath>packages\ILI9341\lcd_ili9341.c</FilePath>
+              <FilePath>packages\ili9341\lcd_ili9341.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -899,6 +904,16 @@
               <FileName>stm32f4xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>libraries\STM32F4xx_HAL\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>xpt2046_touch</GroupName>
+          <Files>
+            <File>
+              <FileName>drv_xpt2046.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>packages\xpt2046\drv_xpt2046.c</FilePath>
             </File>
           </Files>
         </Group>
